@@ -1,0 +1,114 @@
+import 'package:flutter/material.dart';
+// ^ Flutter-ийн үндсэн UI сангуудыг оруулж ирж байна.
+
+class StylingPage extends StatefulWidget {
+// ^ StatefulWidget: Дэлгэц дээрх мэдээлэл (State) өөрчлөгдөх боломжтой үед ашиглана.
+  @override
+  State<StylingPage> createState() => _StylingPageState();
+  // ^ Энэ виджетийн логик хэсэг буюу State-ийг үүсгэж байна.
+}
+
+class _StylingPageState extends State<StylingPage> {
+// ^ Энэ класс дотор дэлгэцийн логик болон хувьсагчууд байрлана.
+
+  String title = "Initial";
+  // ^ Дэлгэц дээр харагдах текстийн анхны утга.
+
+  void setTitle() {
+  // ^ Товч дарах үед ажиллах функц.
+    setState(() {
+    // ^ setState: Дэлгэцийг дахин зурж (Re-render), өөрчлөлтийг харуулна.
+      title = "Өөрчлөгдөв!";
+      // ^ title хувьсагчийн утгыг сольж байна.
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+  // ^ Дэлгэц дээр харагдах дүрсийг зурдаг үндсэн функц.
+    return Scaffold(
+    // ^ Цагаан дэвсгэр, толгой хэсэг зэрэг програмын үндсэн бүтэц.
+      appBar: AppBar(title: Text("Basic Styling")),
+      // ^ Дэлгэцийн дээд хэсэгт байрлах гарчиг.
+      
+      body: Center(
+      // ^ Доторх элементээ дэлгэцийн яг голд байрлуулна.
+        child: Column(
+        // ^ Элементүүдийг босоо тэнхлэгийн дагуу дээрээс доош өрнө.
+          mainAxisAlignment: MainAxisAlignment.center,
+          // ^ Босоо тэнхлэгт элементүүдийг голлуулна.
+          
+          children: [
+          // ^ Column дотор байрлах элементүүдийн жагсаалт.
+            
+            Container(
+            // ^ Хайрцаг буюу Контейнер. Хэмжээ, өнгө, хэлбэр өгөхөд ашиглана.
+              width: 300,
+              // ^ Өргөн нь 300 пиксел.
+              height: 100,
+              // ^ Өндөр нь 100 пиксел.
+              alignment: Alignment.center,
+              // ^ Доторх текстээ өөрийнхөө голд байрлуулна.
+
+              decoration: BoxDecoration(
+              // ^ Container-ийн гоёл чимэглэл (өнгө, хүрээ, сүүдэр).
+                color: Colors.blue,
+                // ^ Үндсэн дэвсгэр өнгө.
+                
+                borderRadius: BorderRadius.circular(20),
+                // ^ Өнцгүүдийг 20 пикселээр дугуйрна (мохоо өнцөгтэй болгоно).
+                
+                boxShadow: [
+                // ^ Сүүдэр өгөх хэсэг. Жагсаалт (List) авна.
+                  BoxShadow(
+                    color: Colors.black26,
+                    // ^ Сүүдрийг бүдэг хар өнгөтэй болгоно.
+                    blurRadius: 10,
+                    // ^ Сүүдрийн сарних хэмжээ (их байх тусам бүдэг).
+                    offset: Offset(5, 5),
+                    // ^ Сүүдрийг баруун (x) болон доош (y) чиглэлд шилжүүлнэ.
+                  )
+                ],
+                
+                gradient: LinearGradient(
+                // ^ Ууссан өнгө (Gradient) үүсгэнэ.
+                  colors: [Colors.blue, Colors.purple],
+                  // ^ Цэнхэрээс ягаан руу уусна.
+                ),
+              ),
+              
+              child: Text(
+                title,
+                // ^ Дээр зарласан хувьсагчийг энд харуулна.
+                style: TextStyle(
+                // ^ Текстийн загварчлал.
+                  fontSize: 30,
+                  // ^ Үсгийн хэмжээ.
+                  fontWeight: FontWeight.bold,
+                  // ^ Үсгийг бүдүүрүүлнэ (Bold).
+                  color: Colors.white,
+                  // ^ Үсгийн өнгө цагаан.
+                  fontStyle: FontStyle.italic,
+                  // ^ Үсгийг налуулна.
+                  decoration: TextDecoration.underline,
+                  // ^ Текстийн доогуур зураас татна.
+                ),
+              ),
+            ),
+            
+            SizedBox(height: 20),
+            // ^ 20 пикселийн хоосон зай авна (Container болон товчны хооронд).
+            
+            ElevatedButton(
+            // ^ Товгороор харагддаг товчлуур.
+              onPressed: setTitle,
+              // ^ Товч дарагдах үед setTitle функцийг ажиллуулна.
+              child: Text("Текстийг өөрчлөх"),
+              // ^ Товч дээр харагдах текст.
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

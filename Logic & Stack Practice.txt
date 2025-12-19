@@ -1,0 +1,134 @@
+import 'dart:async'; 
+// ^ Timer ашиглахын тулд энэ санг заавал оруулна.
+import 'package:flutter/material.dart';
+
+class GamePage extends StatefulWidget {
+  @override
+  State<GamePage> createState() => _GamePageState();
+}
+
+class _GamePageState extends State<GamePage> {
+  
+  int _timer = 1000;
+  // ^ Хугацааг тоолох тоон хувьсагч.
+  
+  List<String> cardList = ["A", "K", "J", "10"];
+  // ^ Тоглоомонд ашиглах картуудын жагсаалт.
+  
+  List<String> showCardList = [];
+  // ^ Хэрэглэгч аль хэдийн дарсан (нээгдсэн) картуудыг хадгалах жагсаалт.
+  
+  Timer? timerController;
+  // ^ Цагийг удирдах контроллер (эхлүүлэх, зогсоох).
+
+  @override
+  void initState() {
+  // ^ Дэлгэц анх үүсэхэд ГАНЦ удаа ажилладаг функц.
+    super.initState();
+    
+    cardList.shuffle();
+    // ^ Картуудын байрлалыг санамсаргүйгээр холино.
+
+    // 10 миллисекунд тутамд доторх кодоо ажиллуулна.
+    timerController = Timer.periodic(Duration(milliseconds: 10), (timer) {
+      if (_timer > 0) {
+      // ^ Хэрэв хугацаа дуусаагүй бол...
+        setState(() {
+          _timer = _timer - 1;
+          // ^ Хугацааг 1-ээр багасгаж дэлгэцийг шинэчилнэ.
+        });
+      } else {
+        timer.cancel();
+        // ^ Хугацаа дууссан бол цагийг зогсооно.
+      }
+    });
+  }
+
+  void onClickCard(String title) {
+  // ^ Карт дээр дарахад ажиллах функц.
+    if (title == "A") {
+      timerController?.cancel();
+      // ^ Хэрэв "A" гэсэн карт байвал цагийг шууд зогсооно (Win condition).
+    }
+    setState(() {
+      showCardList.add(title);
+      // ^ Дарсан картыг нээгдсэн картуудын жагсаалт руу нэмнэ.
+    });
+  }
+
+  @override
+  void dispose() {
+  // ^ Энэ дэлгэц хаагдах үед ажиллана.
+    timerController?.cancel();
+    // ^ Цагийг санах ойноос цэвэрлэнэ (Memory leak-ээс сэргийлнэ).
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
+    // ^ Тухайн утасны дэлгэцийн нийт өндрийг авна.
+
+    return Scaffold(
+      body: Stack(
+      // ^ Виджетүүдийг нэг нэгнийхээ дээр давхарлаж байрлуулна.
+        children: [
+          // 1-р давхарга: Хамгийн цаад талд.
+          Align(
+          // ^ Элементийн байршлыг нарийн зааж өгнө.
+            alignment: Alignment.bottomCenter,
+            // ^ Дэлгэцийн доод хэсэгт байрлуулна.
+            child: Container(
+              height: height * (_timer / 1000),
+              // ^ Хугацаа багасах тусам өндөр нь багасна (Animation effect).
+              color: Colors.amberAccent,
+              // ^ Шар өнгөтэй.
+              width: double.infinity,
+              // ^ Өргөн нь дэлгэц дүүрэн байна.
+            ),
+          ),
+
+          // 2-р давхарга: Дээр нь байрлах үндсэн контент.
+          Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("Хугацаа: $_timer", style: TextStyle(fontSize: 30)),
+                // ^ Одоогийн хугацааг тоогоор харуулна.
+                
+                SizedBox(height: 50),
+                
+                Wrap(
+                // ^ Row-той адил боловч, зай багтахгүй бол автоматаар доод мөр рүү шилждэг.
+                  spacing: 20,
+                  // ^ Элемент хоорондын зай.
+                  children: cardList.map((card) {
+                  // ^ list.map: Карт бүрийн хувьд давталт хийж код үүсгэнэ.
+                    return GestureDetector(
+                    // ^ Дарах үйлдлийг мэдэрдэг виджет (Container өөрөө дарж болдоггүй тул үүгээр орооно).
+                      onTap: () => onClickCard(card),
+                      // ^ Дарах үед функцийг дуудна.
+                      
+                      child: Container(
+                        width: 80, height: 100,
+                        color: showCardList.contains(card) ? Colors.white : Colors.blue,
+                        // ^ Нээгдсэн бол цагаан, үгүй бол цэнхэр харагдана (Ternary operator).
+                        alignment: Alignment.center,
+                        child: Text(
+                          showCardList.contains(card) ? card : "?",
+                          // ^ Нээгдсэн бол үсгийг, үгүй бол "?" тэмдэг харуулна.
+                          style: TextStyle(fontSize: 24),
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                  // ^ Map-аас буцаж ирсэн өгөгдлийг буцаагаад List болгоно.
+                )
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

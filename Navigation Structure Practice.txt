@@ -1,0 +1,110 @@
+import 'package:flutter/material.dart';
+
+class NavigationPage extends StatefulWidget {
+  @override
+  State<NavigationPage> createState() => _NavigationPageState();
+}
+
+class _NavigationPageState extends State<NavigationPage> {
+  int navigationBarIndex = 0;
+  // ^ Доод цэсний идэвхтэй байгаа товчны индекс (0, 1, 2...).
+
+  void onTapNavigationItem(int idx) {
+  // ^ Доод цэс дарахад ажиллах функц.
+    setState(() {
+      navigationBarIndex = idx;
+      // ^ Сонгогдсон индексийг шинэчилж дэлгэцийг зурна.
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return DefaultTabController(
+    // ^ TabBar болон TabBarView хоёрыг холбож ажиллуулдаг удирдлага.
+      length: 3,
+      // ^ Нийт хэдэн ширхэг Tab цэс байгааг заана.
+      
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.blue,
+          title: Text("Navigation App"),
+          centerTitle: true,
+          // ^ Гарчгийг голлуулна (Android дээр default нь зүүн талд байдаг).
+          
+          bottom: TabBar(
+          // ^ AppBar-ийн доод хэсэгт байрлах цэс.
+            indicatorColor: Colors.yellow,
+            // ^ Идэвхтэй байгаа Tab-ийн доогуур зураасны өнгө.
+            labelColor: Colors.white,
+            // ^ Идэвхтэй текстын өнгө.
+            tabs: [
+              Tab(text: "Tab 1"),
+              Tab(text: "Tab 2"),
+              Tab(text: "Tab 3"),
+            ],
+          ),
+        ),
+        
+        body: TabBarView(
+        // ^ TabBar дээр дарахад харгалзах контентыг харуулдаг хэсэг.
+        // ^ Swipe буюу хуруугаар гүйлгэж солих боломжтой.
+          children: [
+            // Tab 1-ийн контент: ListView (Гүйдэг жагсаалт)
+            ListView.builder(
+            // ^ Олон тооны өгөгдлийг жагсаахад ашиглана (Санах ойд хэмнэлттэй).
+              itemCount: 20,
+              // ^ Нийт 20 ширхэг элемент байна.
+              itemBuilder: (context, index) {
+              // ^ Элемент бүрийг зурах функц.
+                return Container(
+                  margin: EdgeInsets.all(10),
+                  // ^ Гадна талдаа 10 пиксел зай авна.
+                  color: Colors.amberAccent,
+                  height: 50,
+                  alignment: Alignment.center,
+                  child: Text("Жагсаалт ${index + 1}"),
+                  // ^ index нь 0-ээс эхэлдэг тул 1-ийг нэмж харуулна.
+                );
+              },
+            ),
+            
+            // Tab 2-ийн контент
+            Center(child: Text("Нүүр хуудас", style: TextStyle(fontSize: 30))),
+            
+            // Tab 3-ийн контент
+            Center(child: Text("Профайл хэсэг", style: TextStyle(fontSize: 30))),
+          ],
+        ),
+
+        bottomNavigationBar: BottomNavigationBar(
+        // ^ Дэлгэцийн хамгийн доор байрлах үндсэн цэс.
+          currentIndex: navigationBarIndex,
+          // ^ Аль товч идэвхтэй байгааг заана.
+          onTap: onTapNavigationItem,
+          // ^ Товч дарахад бидний бичсэн функцийг дуудна.
+          backgroundColor: Colors.white,
+          selectedItemColor: Colors.blue,
+          // ^ Сонгогдсон товчны өнгө.
+          unselectedItemColor: Colors.grey,
+          // ^ Сонгогдоогүй товчны өнгө.
+          items: [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.newspaper),
+              // ^ Flutter-ийн бэлэн дүрс (Icon) ашиглаж байна.
+              label: "Мэдээ",
+              // ^ Товчны доорх тайлбар текст.
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: "Нүүр",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person),
+              label: "Профайл",
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

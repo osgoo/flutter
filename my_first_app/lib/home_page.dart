@@ -1,130 +1,146 @@
-// import 'package:flutter/material.dart';
-
-// class HomePage extends StatefulWidget {
-//   @override
-//   State<HomePage> createState() => _HomePageState();
-// }
-
-// class _HomePageState extends State<HomePage> {
-//   // const HomePage({super.key});
-//   String title = "Initial";
-
-//   void setTitle(){
-//     setState(() {
-//       title = "Uurchlugduv";
-//     });
-//     print(title);
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: Center(
-//         child: Column(
-//           mainAxisAlignment: MainAxisAlignment.center,
-//           children: [
-//             Text(title),
-//             ElevatedButton(
-//               onPressed: setTitle,
-//               child: Text("Uurchluh"),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-// // Statless Widget -> uuruu uuriiguu re render buyu dahin renderledeh bolomjgui
-// // Statefil Widget -> re render hiih bolomjtoi
+// ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
+import 'package:my_first_app/routes.dart';
+import 'package:my_first_app/tile_page.dart';
 
-class HomePage extends StatelessWidget {
-  // const Homepage({super.key});
+class HomePage extends StatefulWidget {
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
 
-  // Text text = Text("ene bol String");
+class _HomePageState extends State<HomePage> {
+  final lastNameController = TextEditingController();
+  final formKey = GlobalKey<FormState>();
+  GenderEnum gender = GenderEnum.male;
+  bool isChecked = false;
+
+  void onSubmit() {
+    if (formKey.currentState!.validate()) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(lastNameController.text),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // body: Padding(
-      //   // padding: EdgeInsets.fromLTRB(2, 50, 100, 20),
-      //   // padding: EdgeInsets.only(top: 50, left: 20),
-      //   padding: EdgeInsets.symmetric(vertical:30, horizontal: 40),
-      //   child: Text(
-        body: Center( 
-          child: Container(
-            color: Colors.blue,
-            // alignment: Alignment.bottomCenter,
-            // constraints: BoxConstraints(
-            //   maxHeight: 100,
-            //   maxWidth: 100,
-            // ),
-            // margin: EdgeInsets.only(bottom: 150),
-            // padding: EdgeInsets.only(bottom: 50),
-            // transform: Matrix4.rotationY(20),
-            
-            // decoration: BoxDecoration(
-            //   // color: Colors.amber,
-            //   // borderRadius: BorderRadius.all(Radius.circular(50)),
-            //   // borderRadius: BorderRadius.circular(50),
-            //   // borderRadius: BorderRadius.horizontal(
-            //   //   left: Radius.circular(10),
-            //   //   right: Radius.elliptical(10, 50),
-            //   // ),
-            //   // borderRadius: BorderRadius.only(
-            //   //   bottomLeft: Radius.circular(50),
-            //   //   bottomRight: Radius.circular(50),
-            //   // ),
-            //   // border: Border.all(
-            //   //   color: Colors.black,
-            //   //   width: 2,
-            //   //   style: BorderStyle.solid,
-            //   // border: Border(bottom: BorderSide(color: Colors.black))
-            //   // ),
-            //   // boxShadow: [
-            //   //   BoxShadow(
-            //   //     color: Colors.black,
-            //   //     offset: Offset(10, 10),
-            //   //     blurRadius: 20,
-            //   //     // blurStyle: BlurStyle.solid,
-            //   //     spreadRadius: 20,
-            //   //   )
-            //   // ]
-            //   // gradient: LinearGradient(
-            //   //   colors: [Colors.black, Colors.red, Colors.blue],
-            //   //   begin: Alignment.topLeft,
-            //   //   end: Alignment.center,
-            //   //   tileMode: TileMode.mirror,
-            //   // ),
-            //   // image: DecorationImage(image: AssetImage("")),
-            //   image: DecorationImage(image: NetworkImage("https://upload.wikimedia.org/wikipedia/commons/b/b6/Image_created_with_a_mobile_phone.png"),
-            //   opacity: 0.5,
-            //   ),
-            // ),
-            child: Text(
-            "Ene bol stringsdvfdvxcvxcvcx gdf  ds  gsdfgsd fg ",
-            // maxLines: 1,
-            style: TextStyle(
-                // backgroundColor: Colors.amberAccent,
-                // color: Colors.blueAccent,
-                // decoration: TextDecoration.underline,
-                // decorationColor: Colors.green,
-                // decorationThickness: 10,
-                // decorationStyle: TextDecorationStyle.wavy,
-                fontSize: 30,
-                fontStyle: FontStyle.italic,
-                fontWeight: FontWeight.bold,
-                // wordSpacing: 10,
-                // height: 5,
-                // overflow: TextOverflow.ellipsis,
+      appBar: AppBar(
+        backgroundColor: Colors.blueAccent,
+        centerTitle: true,
+        title: Text(
+          "Home Page",
+          style: TextStyle(color: Colors.white),
+        ),
+      ),
+      body: Center(
+        child: Form(
+          key: formKey,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 20,
+            ),
+            child: Column(
+              children: [
+                TextFormField(
+                  controller: lastNameController,
+                  validator: (value) {
+                    if (value == null ||
+                        value.isEmpty) {
+                      return "Хоосон байж болохгүй";
+                    }
+                    return null;
+                  },
+                  decoration: InputDecoration(
+                    label: Text("Овог"),
+                    hintText: "hello",
+                  ),
+                ),
+                // dropdown
+                DropdownButtonFormField(
+                  validator: (value) {
+                    if (value == "1") {
+                      return "Dropdown 1 байж болохгүй";
+                    }
+                    return null;
+                  },
+                  items: [
+                    DropdownMenuItem(
+                      value: "1",
+                      child: Text("Dropdown1"),
+                    ),
+                    DropdownMenuItem(
+                      value: "2",
+                      child: Text("Dropdown2"),
+                    ),
+                    DropdownMenuItem(
+                      value: "3",
+                      child: Text("Dropdown3"),
+                    ),
+                  ],
+                  onChanged: (value) {},
+                ),
+                //Radio
+                Row(
+                  children: [
+                    Radio(
+                      value: GenderEnum.male,
+                      groupValue: gender,
+                      onChanged: (value) {
+                        if (value != null)
+                          setState(() {
+                            gender = value;
+                          });
+                      },
+                    ),
+                    Text("Male"),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Radio(
+                      value: GenderEnum.female,
+                      groupValue: gender,
+                      onChanged: (value) {
+                        if (value != null)
+                          setState(() {
+                            gender = value;
+                          });
+                      },
+                    ),
+                    Text("Female"),
+                  ],
+                ),
 
-              ),
-              // textAlign: TextAlign.center,
+                //Checkbox
+                Row(
+                  children: [
+                    Checkbox(
+                      value: isChecked,
+                      onChanged: (val){
+                        setState(() {
+                          isChecked = !isChecked;
+                        });
+                      },
+                    ),
+                    Text("Үйлчилгээний нөхцөл зөвшөөрч байна"),
+                  ],
+                ),
+
+                ElevatedButton(
+                  onPressed: onSubmit,
+                  child: Text("Submit"),
+                ),
+              ],
             ),
           ),
+        ),
       ),
     );
   }
 }
+
+enum GenderEnum { male, female }
